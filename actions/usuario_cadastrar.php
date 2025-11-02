@@ -1,30 +1,75 @@
-<form action="../../actions/usuario_cadastrar.php" method="POST">
-    <!-- ... campos do formulário ... -->
-</form>
-```
+<?php
+/**
+ * actions/usuario_cadastrar.php
+ * Processa o cadastro de um novo usuário.
+ * * Requisitos de Inclusão:
+ * - includes/auth_check.php: Para verificar o login e o nível de acesso (Admin).
+ * - app/dao/UsuarioDAO.php: Para interagir com o banco de dados.
+ */
 
-### Explicação do caminho: `../../actions/usuario_cadastrar.php`
+// Inclui o cabeçalho e a verificação de autenticação.
+// Caminho: actions/ -> ../ -> includes/
+require_once __DIR__ . '/../includes/auth_check.php';
 
-O caminho é relativo à localização do arquivo que contém o formulário: `public/usuarios/cadastrar.php`.
+// Verifica se o usuário é administrador (apenas admin pode cadastrar/editar outros usuários)
+if ($_SESSION['user_nivel'] !== 'admin') {
+    $_SESSION['msg_erro'] = "Acesso negado. Apenas administradores podem cadastrar usuários.";
+    header("Location: ../public/usuarios/listar.php");
+    exit();
+}
 
-1.  **`../`**: Sobe um nível, saindo de `usuarios/` para `public/`.
-2.  **`../../`**: Sobe mais um nível, saindo de `public/` para a **raiz do seu projeto** (`ProjetoPHP/`).
-3.  **`../../actions/`**: Entra na pasta `actions/` na raiz do projeto.
-4.  **`../../actions/usuario_cadastrar.php`**: Aponta para o arquivo de processamento correto dentro da pasta `actions/`.
+// Inclui o DAO.
+// Caminho: actions/ -> ../ -> app/dao/UsuarioDAO.php
+require_once __DIR__ . '/../app/dao/UsuarioDAO.php';
 
-Você pode ver isso aplicado no código que eu gerei para você. Por exemplo, no arquivo **`public/usuarios/cadastrar.php`** (que não está no Canvas agora, mas foi gerado):
+// 1. Verifica se o método de requisição é POST
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    
+    // 2. Coleta e sanitiza os dados do formulário
+    $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
+    $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+    $senha = filter_input(INPUT_POST, 'senha', FILTER_DEFAULT);
+    $confirmar_senha = filter_input(INPUT_POST, 'confirmar_senha', FILTER_DEFAULT);
+    $nivel_acesso = filter_input(INPUT_POST, 'nivel_acesso', FILTER_SANITIZE_SPECIAL_CHARS);
 
-```php
-// Trecho de public/usuarios/cadastrar.php
-// ...
-<form action="../../actions/usuario_cadastrar.php" method="POST">
-// ...
-```
+    // 3. Validação básica (campos vazios)
+    if (empty($nome) || empty($email) || empty($senha) || empty($confirmar_senha) || empty($nivel_acesso)) {
+        $_SESSION['msg_erro'] = "Todos os campos obrigatórios devem ser preenchidos.";
+        header("Location: ../public/usuarios/cadastrar.php");
+        exit();
+    }
 
-E no arquivo **`public/usuarios/editar.php`** (que está no Canvas como "Edição de Usuário"):
+    // 4. Validação de senhas
+    if ($senha !== $confirmar_senha) {
+        $_SESSION['msg_erro'] = "As senhas digitadas não coincidem.";
+        header("Location: ../public/usuarios/cadastrar.php");
+        exit();
+    }
 
-```php
-// Trecho de public/usuarios/editar.php
-// ...
-<form action="../../actions/usuario_editar.php" method="POST">
-// ...
+    // 5. Hash da senha
+    $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+    // 6. Instancia o DAO e verifica duplicidade de e-mail
+    $usuarioDAO = new UsuarioDAO();
+
+    if ($usuarioDAO->emailExiste($email)) {
+        $_SESSION['msg_erro'] = "Este e-mail já está cadastrado no sistema.";
+        header("Location: ../public/usuarios/cadastrar.php");
+        exit();
+    }
+
+    // 7. Tenta cadastrar o usuário
+    if ($usuarioDAO->cadastrar($nome, $email, $senhaHash, $nivel_acesso)) {
+        $_SESSION['msg_sucesso'] = "Usuário '$nome' cadastrado com sucesso!";
+        header("Location: ../public/usuarios/listar.php");
+    } else {
+        $_SESSION['msg_erro'] = "Erro ao cadastrar o usuário no banco de dados.";
+        header("Location: ../public/usuarios/cadastrar.php");
+    }
+    exit();
+
+} else {
+    // Se não for POST, redireciona para a página de listagem.
+    header("Location: ../public/usuarios/listar.php");
+    exit();
+}

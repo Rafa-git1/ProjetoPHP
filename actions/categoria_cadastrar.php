@@ -16,10 +16,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// 1. Captura e Sanitiza os dados
+// Captura os dados
 $nome = filter_input(INPUT_POST, 'nome', FILTER_SANITIZE_SPECIAL_CHARS);
 
-// 2. Validação Básica
+// Validação Básica
 if (empty($nome)) {
     $_SESSION['msg_erro'] = "O nome da categoria é obrigatório.";
     $_SESSION['form_data'] = $_POST; // Salva os dados para preencher o form novamente
@@ -27,11 +27,11 @@ if (empty($nome)) {
     exit;
 }
 
-// 3. Inclui o DAO e inicializa
+// Inclui o DAO e inicializa
 require_once __DIR__ . '/../app/dao/CategoriaDAO.php';
 $categoriaDAO = new CategoriaDAO();
 
-// 4. Verifica se o nome já existe
+// Verifica se o nome já existe
 if ($categoriaDAO->nomeExiste($nome)) {
     $_SESSION['msg_erro'] = "O nome da categoria '{$nome}' já existe.";
     $_SESSION['form_data'] = $_POST;
@@ -39,7 +39,7 @@ if ($categoriaDAO->nomeExiste($nome)) {
     exit;
 }
 
-// 5. Cadastra no banco
+// Cadastra no banco
 if ($categoriaDAO->cadastrar($nome)) {
     $_SESSION['msg_sucesso'] = "Categoria '{$nome}' cadastrada com sucesso!";
     header("Location: ../public/categorias/listar.php");

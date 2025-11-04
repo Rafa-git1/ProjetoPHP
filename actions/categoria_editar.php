@@ -6,7 +6,7 @@
 // Define a raiz do projeto (Subindo 1 nível: de /actions para /ProjetoPHP)
 $projectRoot = dirname(__DIR__);
 
-// 1. Checagem de Autenticação e Sessão
+// Checagem de Autenticação e Sessão
 require_once $projectRoot . '/includes/auth_check.php';
 
 // Proteção Adicional: Apenas administradores podem acessar
@@ -16,13 +16,13 @@ if ($_SESSION['nivel_acesso'] !== 'admin') {
     exit();
 }
 
-// 2. Dependências
+// Dependências
 require_once $projectRoot . '/app/dao/CategoriaDAO.php';
 $categoriaDAO = new CategoriaDAO(); // Instância criada aqui para validação
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
-    // 3. Coleta e Sanitização dos Dados
+    // Coleta e Sanitização dos Dados
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $nome = filter_input(INPUT_POST, 'nome', FILTER_DEFAULT);
 
@@ -32,14 +32,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Define o caminho de volta em caso de erro
     $locationOnError = "/ProjetoPHP/public/categorias/editar.php?id={$id}";
 
-    // 4. Validação dos Dados
+    // Validação dos Dados
     if ($id === false || $id === null || empty($nome)) {
         $_SESSION['msg_erro'] = "Dados inválidos ou incompletos.";
         header("Location: " . $locationOnError);
         exit();
     }
     
-    // 5. Validação de Unicidade (NOVA ETAPA)
+    // Validação de Unicidade (NOVA ETAPA)
     // Chama o método nomeExiste() do DAO, ignorando o ID atual
     if ($categoriaDAO->nomeExiste($nome, $id)) {
         $_SESSION['msg_erro'] = "O nome da categoria '{$nome}' já existe.";
@@ -47,17 +47,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
     
-    // 6. Execução do DAO
+    // Execução do DAO
     if ($categoriaDAO->atualizar($id, $nome)) {
         
-        // 7. Sucesso: Limpa dados e define mensagem
+        // Sucesso: Limpa dados e define mensagem
         unset($_SESSION['form_data']); 
         $_SESSION['msg_sucesso'] = "Categoria '{$nome}' atualizada com sucesso.";
         header("Location: /ProjetoPHP/public/categorias/listar.php"); // Redireciona para a listagem
         exit();
         
     } else {
-        // 8. Erro no Banco
+        // Erro no Banco
         // Aqui, capturamos erros de banco de dados reais (ex: falha de conexão)
         $_SESSION['msg_erro'] = "Erro interno ao atualizar a categoria. Tente novamente.";
         header("Location: " . $locationOnError); // Redireciona de volta ao formulário

@@ -16,7 +16,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     $_SESSION['msg_erro'] = "Você precisa estar logado para acessar esta página.";
     
     // Redireciona para a página de login
-    header("Location: /login.php");
+    header("Location: /ProjetoPHP/public/login.php");
     exit();
 }
 

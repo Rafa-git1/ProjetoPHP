@@ -14,7 +14,7 @@ require_once $projectRoot . '/includes/auth_check.php';
 require_once $projectRoot . '/includes/header.php'; 
 ?>
 
-<h1>Bem-vindo(a) ao Dashboard, <?= htmlspecialchars($_SESSION['user_name'] ?? 'Usuário'); ?>!</h1>
+<h1>Bem-vindo(a) ao Dashboard, <?= htmlspecialchars($_SESSION['user_nome'] ?? 'Usuário'); ?>!</h1>
 
 <!-- A mensagem de sucesso do login é exibida no header.php, então podemos removê-la daqui. -->
 <p>Seu nível de acesso é: <strong><?= htmlspecialchars($_SESSION['user_nivel']); ?></strong></p>
@@ -36,9 +36,9 @@ require_once $projectRoot . '/includes/header.php';
     <?php endif; ?>
     
     <div class="card">
-        <h2>Recursos Extras</h2>
-        <p>Implemente a busca avançada, exportação de dados ou upload de arquivos.</p>
-        <a href="#" class="button secondary-button">Em Breve</a>
+        <h2>Categorias</h2>
+        <p>Cadastro de categorias para relacionar com os produtos.</p>
+        <a href="<?= $base_url_public; ?>categorias/listar.php" class="button">Gerenciar Usuários (Admin)</a>
     </div>
 
 </div>

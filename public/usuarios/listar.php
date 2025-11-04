@@ -66,7 +66,7 @@ require_once __DIR__ . '/../../includes/header.php';
                                 <span class="icon">&#x270E;</span> Editar
                             </a>
                             <!-- Botão de exclusão com confirmação JS -->
-                            <form action="../../actions/usuario_deletar.php" method="POST" style="display:inline-block;"
+                            <form action="../../actions/usuario_deletar.php" method="POST" style="display:inline-block;"  class="button btn-danger"
                                 onsubmit="return confirm('Tem certeza que deseja deletar o usuário <?= htmlspecialchars($usuario['nome']); ?>? Esta ação é irreversível.');">
                                 <input type="hidden" name="id" value="<?= $usuario['id']; ?>">
                                 <button type="submit" title="Excluir" class="button button-small button-danger">

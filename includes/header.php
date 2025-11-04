@@ -21,9 +21,10 @@ $title = $pageTitle ?? 'Sistema CRUD';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($title); ?> - Projeto PHP</title>
     <!-- Importa o CSS centralizado que contém o estilo de todo o sistema -->
-    <link rel="stylesheet" href="<?= $base_url; ?>assets/css/style.css">
+    <link rel="stylesheet" href="/ProjetoPHP/assets/css/style.css">
+
 </head>
-<body>
+    <body>
     <header class="app-header">
         <nav class="main-nav">
             <!-- Todos os links corrigidos para usar $base_url para serem absolutos -->
@@ -31,6 +32,9 @@ $title = $pageTitle ?? 'Sistema CRUD';
             <a href="<?= $base_url; ?>produtos/listar.php">Produtos</a>
 
             <?php if (isset($_SESSION['user_nivel']) && $_SESSION['user_nivel'] === 'admin'): ?>
+                <!-- NOVO LINK PARA CATEGORIAS -->
+                <a href="<?= $base_url; ?>categorias/listar.php">Categorias</a>
+                
                 <a href="<?= $base_url; ?>usuarios/listar.php">Usuários</a>
             <?php endif; ?>
         </nav>

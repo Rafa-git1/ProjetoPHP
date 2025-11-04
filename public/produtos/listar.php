@@ -46,7 +46,7 @@ $categorias = $produtoDAO->listarCategorias(); // Para popular o filtro de categ
         </select>
     </div>
     <button type="submit">Aplicar Filtros</button>
-    <a href="listar.php">Limpar Filtros</a>
+    <a href="listar.php" class="button btn-primary">Limpar Filtros</a>
 </form>
 
 <?php if (empty($produtos)): ?>

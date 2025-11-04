@@ -74,7 +74,7 @@ $categorias = $produtoDAO->listarCategorias(); // Para popular o filtro de categ
                 <td>
                     <a href="editar.php?id=<?= $produto['id']; ?>">Editar</a> |
                     <!-- CORRIGIDO: Usando caminho absoluto para o action -->
-                    <form method="POST" action="/PROJETOPHP/actions/produto_deletar.php" style="display:inline;">
+                    <form method="POST" action="/PROJETOPHP/actions/produto_deletar.php" style="display:inline;" class="button btn-danger">
                         <input type="hidden" name="id" value="<?= $produto['id']; ?>">
                         <!-- Lembre-se: O ideal é usar uma modal customizada ao invés de alert/confirm -->
                         <button type="submit" onclick="return confirm('Tem certeza que deseja deletar o produto?')" style="background: none; border: none; color: blue; cursor: pointer; padding: 0;">Deletar</button>

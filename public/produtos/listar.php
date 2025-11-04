@@ -72,7 +72,7 @@ $categorias = $produtoDAO->listarCategorias(); // Para popular o filtro de categ
                 <td><?= htmlspecialchars($produto['categoria_nome'] ?? 'Sem Categoria'); ?></td>
                 <td><?= htmlspecialchars(date('d/m/Y', strtotime($produto['data_cadastro']))); ?></td>
                 <td>
-                    <a href="editar.php?id=<?= $produto['id']; ?>">Editar</a> |
+                    <a href="editar.php?id=<?= $produto['id']; ?>" class="button btn-warning">Editar</a> |
                     <!-- CORRIGIDO: Usando caminho absoluto para o action -->
                     <form method="POST" action="/PROJETOPHP/actions/produto_deletar.php" style="display:inline;" class="button btn-danger">
                         <input type="hidden" name="id" value="<?= $produto['id']; ?>">

@@ -15,7 +15,7 @@ require_once __DIR__ . '/../app/dao/ProdutoDAO.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     
-    // 1. Coleta e Sanitização dos Dados
+    // Coleta e Sanitização dos Dados
     // Usamos FILTER_SANITIZE_STRING (ou FILTER_DEFAULT) e htmlspecialchars() na saída (view) para proteção XSS
     $nome = filter_input(INPUT_POST, 'nome', FILTER_DEFAULT);
     $descricao = filter_input(INPUT_POST, 'descricao', FILTER_DEFAULT);
@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         'categoria_id' => $categoria_id
     ];
 
-    // 2. Validação dos Dados
+    // Validação dos Dados
     if (empty($nome) || $categoria_id === false || $categoria_id === null || empty($preco_str)) {
         $_SESSION['msg_erro'] = "Por favor, preencha todos os campos obrigatórios corretamente.";
         header("Location: ../public/produtos/cadastrar.php");
@@ -45,18 +45,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit();
     }
     
-    // 3. Execução do DAO
+    // Execução do DAO
     $produtoDAO = new ProdutoDAO();
     if ($produtoDAO->criar($nome, $descricao, $preco, $categoria_id)) {
         
-        // 4. Sucesso: Limpa dados e define mensagem
+        // Sucesso: Limpa dados e define mensagem
         unset($_SESSION['form_data']); 
         $_SESSION['msg_sucesso'] = "Produto '{$nome}' cadastrado com sucesso.";
         header("Location: ../public/produtos/listar.php"); // Redireciona para a listagem
         exit();
         
     } else {
-        // 5. Erro no Banco
+        // Erro no Banco
         $_SESSION['msg_erro'] = "Erro interno ao cadastrar o produto no banco de dados.";
         header("Location: ../public/produtos/cadastrar.php"); // Redireciona de volta ao formulário
         exit();

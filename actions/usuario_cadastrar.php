@@ -22,7 +22,7 @@ if ($_SESSION['user_nivel'] !== 'admin') {
 // Caminho: actions/ -> ../ -> app/dao/UsuarioDAO.php
 require_once __DIR__ . '/../app/dao/UsuarioDAO.php';
 
-// 1. Verifica se o método de requisição é POST
+// Verifica se o método de requisição é POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     // 2. Coleta e sanitiza os dados do formulário
@@ -32,24 +32,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $confirmar_senha = filter_input(INPUT_POST, 'confirmar_senha', FILTER_DEFAULT);
     $nivel_acesso = filter_input(INPUT_POST, 'nivel_acesso', FILTER_SANITIZE_SPECIAL_CHARS);
 
-    // 3. Validação básica (campos vazios)
+    // Validação básica (campos vazios)
     if (empty($nome) || empty($email) || empty($senha) || empty($confirmar_senha) || empty($nivel_acesso)) {
         $_SESSION['msg_erro'] = "Todos os campos obrigatórios devem ser preenchidos.";
         header("Location: ../public/usuarios/cadastrar.php");
         exit();
     }
 
-    // 4. Validação de senhas
+    // Validação de senhas
     if ($senha !== $confirmar_senha) {
         $_SESSION['msg_erro'] = "As senhas digitadas não coincidem.";
         header("Location: ../public/usuarios/cadastrar.php");
         exit();
     }
 
-    // 5. Hash da senha
+    // Hash da senha
     $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
-    // 6. Instancia o DAO e verifica duplicidade de e-mail
+    // Instancia o DAO e verifica duplicidade de e-mail
     $usuarioDAO = new UsuarioDAO();
 
     if ($usuarioDAO->emailExiste($email)) {
@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // 7. Tenta cadastrar o usuário
+    // Tenta cadastrar o usuário
     if ($usuarioDAO->cadastrar($nome, $email, $senhaHash, $nivel_acesso)) {
         $_SESSION['msg_sucesso'] = "Usuário '$nome' cadastrado com sucesso!";
         header("Location: ../public/usuarios/listar.php");

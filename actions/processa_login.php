@@ -10,7 +10,7 @@ require_once __DIR__ . '/../app/config/Conexao.php';
 require_once __DIR__ . '/../app/dao/UsuarioDAO.php'; // Vamos criar essa classe
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // 1. Sanitizar e obter dados
+    // Obter dados
     $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
     $senha = filter_input(INPUT_POST, 'senha', FILTER_DEFAULT);
 
@@ -24,19 +24,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $usuario = $dao->buscarPorEmail($email);
 
     if ($usuario && password_verify($senha, $usuario['senha_hash'])) {
-        // 2. Login bem-sucedido: Armazenar dados na sessão
+        // Login bem-sucedido: Armazenar dados na sessão
         $_SESSION['logged_in'] = true;
         $_SESSION['user_id'] = $usuario['id'];
         $_SESSION['user_nome'] = $usuario['nome'];
         $_SESSION['user_nivel'] = $usuario['nivel_acesso'];
         
-        // 3. Redirecionar para a área protegida
+        // Redirecionar para a área protegida
         $_SESSION['msg_sucesso'] = "Bem-vindo(a), " . $usuario['nome'] . "!";
         header("Location: /ProjetoPHP/public/dashboard.php");
         exit();
 
     } else {
-        // 4. Falha no login
+        // Falha no login
         $_SESSION['msg_erro'] = "E-mail ou senha inválidos.";
         header("Location: /ProjetoPHP/public/login.php");
         exit();

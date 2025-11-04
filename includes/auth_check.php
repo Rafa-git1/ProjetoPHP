@@ -2,7 +2,6 @@
 /**
  * auth_check.php
  * Script para verificar se o usuário está autenticado. 
- * Deve ser incluído no início de todas as páginas que requerem login.
  */
 
 // Inicia a sessão se ainda não tiver sido iniciada
@@ -19,8 +18,3 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
     header("Location: /ProjetoPHP/public/login.php");
     exit();
 }
-
-// Opcional: Renovação do ID da sessão para prevenir Session Fixation
-// session_regenerate_id(true);
-
-// Neste ponto, o usuário está autenticado e o script continua

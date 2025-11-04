@@ -14,7 +14,7 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
 require_once __DIR__ . '/../app/dao/ProdutoDAO.php';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    // 1. Sanitização e obtenção do ID
+    // Sanitização e obtenção do ID
     $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
 
     if ($id === false || $id === null) {
@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $produtoDAO = new ProdutoDAO();
     
-    // 2. Execução da deleção
+    // Execução da deleção
     if ($produtoDAO->deletar($id)) {
         $_SESSION['msg_sucesso'] = "Produto deletado com sucesso.";
     } else {
@@ -36,6 +36,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $_SESSION['msg_erro'] = "Acesso inválido.";
 }
 
-// 3. Redirecionamento de volta para a listagem
+// Redirecionamento de volta para a listagem
 header("Location: ../public/produtos/listar.php");
 exit();
